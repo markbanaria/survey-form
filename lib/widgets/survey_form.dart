@@ -1,43 +1,47 @@
 // lib/widgets/survey_form.dart
 import 'package:flutter/material.dart';
-import 'text_field_widget.dart';
-import 'star_rating_widget.dart';
-import 'radio_buttons_widget.dart';
-import 'checkboxes_widget.dart';
-import 'slider_widget.dart';
 import '../src/survey_config.dart';
+import '../src/submission_manager.dart'; // Import the SubmissionManager
 
-class SurveyForm extends StatelessWidget {
+class SurveyForm extends StatefulWidget {
   final SurveyConfig config;
+  final SubmissionManager submissionManager = SubmissionManager();
+  final SubmissionConfig submissionConfig;
 
-  SurveyForm({required this.config});
+  SurveyForm({required this.config, required this.submissionConfig});
 
+  @override
+  _SurveyFormState createState() => _SurveyFormState();
+}
+
+class _SurveyFormState extends State<SurveyForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(config.title),
+        title: Text(widget.config.title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Text(
-              config.description,
+              widget.config.description,
               style: TextStyle(fontSize: 16.0),
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: config.questions.length,
+                itemCount: widget.config.questions.length,
                 itemBuilder: (context, index) {
-                  final question = config.questions[index];
+                  final question = widget.config.questions[index];
                   return _buildQuestionWidget(question);
                 },
               ),
             ),
             ElevatedButton(
               onPressed: () {
-                // Add submission logic here
+                final submissionObject = widget.submissionManager.generateSubmissionObject();
+                widget.submissionManager.submitSurvey(widget.submissionConfig);
               },
               child: Text('Submit'),
             ),
@@ -50,42 +54,114 @@ class SurveyForm extends StatelessWidget {
   Widget _buildQuestionWidget(SurveyQuestion question) {
     switch (question.inputType) {
       case InputType.textField:
-        return TextFieldWidget(
-          question: question.question,
-          controller: TextEditingController(),
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: TextField(
+            decoration: InputDecoration(
+              labelText: question.question,
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) {
+              widget.submissionManager.collectResponse(question.question, value);
+            },
+          ),
         );
       case InputType.starRating:
-        return StarRatingWidget(
-          question: question.question,
-          maxRating: question.maxRating ?? 5,
-          onRatingSelected: (rating) {
-            // Handle rating selected
-          },
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(question.question),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: List.generate(question.maxRating ?? 5, (index) {
+                  return IconButton(
+                    icon: Icon(
+                      index < (widget.submissionManager.surveyResponses[question.question] ?? 0)
+                          ? Icons.star
+                          : Icons.star_border,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        widget.submissionManager.collectResponse(question.question, index + 1);
+                      });
+                    },
+                  );
+                }),
+              ),
+            ],
+          ),
         );
       case InputType.radioButton:
-        return RadioButtonsWidget(
-          question: question.question,
-          options: question.options ?? [],
-          onSelected: (selected) {
-            // Handle radio button selection
-          },
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(question.question),
+              ...question.options!.map((option) {
+                return RadioListTile(
+                  title: Text(option),
+                  value: option,
+                  groupValue: widget.submissionManager.surveyResponses[question.question],
+                  onChanged: (value) {
+                    setState(() {
+                      widget.submissionManager.collectResponse(question.question, value);
+                    });
+                  },
+                );
+              }).toList(),
+            ],
+          ),
         );
       case InputType.checkbox:
-        return CheckboxesWidget(
-          question: question.question,
-          options: question.options ?? [],
-          onSelectionChanged: (selected) {
-            // Handle checkbox selection
-          },
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(question.question),
+              ...question.options!.map((option) {
+                return CheckboxListTile(
+                  title: Text(option),
+                  value: (widget.submissionManager.surveyResponses[question.question] ?? []).contains(option),
+                  onChanged: (isSelected) {
+                    setState(() {
+                      List<String> selectedOptions = widget.submissionManager.surveyResponses[question.question] ?? [];
+                      if (isSelected == true) {
+                        selectedOptions.add(option);
+                      } else {
+                        selectedOptions.remove(option);
+                      }
+                      widget.submissionManager.collectResponse(question.question, selectedOptions);
+                    });
+                  },
+                );
+              }).toList(),
+            ],
+          ),
         );
       case InputType.slider:
-        return SliderWidget(
-          question: question.question,
-          min: question.minSliderValue ?? 0,
-          max: question.maxSliderValue ?? 100,
-          onChanged: (value) {
-            // Handle slider value change
-          },
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(question.question),
+              Slider(
+                value: (widget.submissionManager.surveyResponses[question.question] ?? question.minSliderValue)!.toDouble(),
+                min: question.minSliderValue ?? 0,
+                max: question.maxSliderValue ?? 100,
+                onChanged: (value) {
+                  setState(() {
+                    widget.submissionManager.collectResponse(question.question, value);
+                  });
+                },
+              ),
+              Text('Value: ${(widget.submissionManager.surveyResponses[question.question] ?? question.minSliderValue).toStringAsFixed(1)}'),
+            ],
+          ),
         );
       default:
         return Container();
