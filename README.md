@@ -10,7 +10,7 @@ The `flutter_cx_nps_survey` package provides a reusable survey component for Flu
 
 To install the package, add `flutter_cx_nps_survey` to your `pubspec.yaml` file:
 
-```
+```yaml
 dependencies:
   flutter:
     sdk: flutter
