@@ -110,8 +110,9 @@ class SurveyDemoPage extends StatelessWidget {
 
 **Additional Input Types:** Support for more input types, such as date pickers or custom widgets.
 
-License
+
+## License
 This package is licensed under the MIT License. See the LICENSE file for more details.
 
-Contributions
+## Contributions
 Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request.
