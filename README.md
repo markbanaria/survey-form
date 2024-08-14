@@ -29,7 +29,7 @@ flutter pub get
 ## Usage
 Here’s an example of how to use the flutter_cx_nps_survey package in your Flutter app:
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart'; // Import the package
 
