@@ -10,7 +10,7 @@ The `flutter_cx_nps_survey` package provides a reusable survey component for Flu
 
 To install the package, add `flutter_cx_nps_survey` to your `pubspec.yaml` file:
 
-^^^yaml
+```yaml
 dependencies:
   flutter:
     sdk: flutter
@@ -18,19 +18,19 @@ dependencies:
     git:
       url: https://github.com/markbanaria/survey-form.git
       ref: master
-^^^
+```
 
 After updating your `pubspec.yaml`, run the following command to fetch the package:
 
-^^^bash
+```bash
 flutter pub get
-^^^
+```
 
 ## Usage
 
 Here’s an example of how to use the `flutter_cx_nps_survey` package in your Flutter app:
 
-^^^dart
+```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart'; // Import the package
 
@@ -97,7 +97,7 @@ class SurveyDemoPage extends StatelessWidget {
     );
   }
 }
-^^^
+```
 
 ## Input Widgets
 
@@ -109,12 +109,12 @@ The `TextFieldWidget` is used for open-ended questions where the respondent can 
 
 **Example:**
 
-^^^dart
+```dart
 SurveyQuestion(
   question: 'Any additional comments?',
   inputType: InputType.textField,
 )
-^^^
+```
 
 ### 2. **StarRatingWidget**
 
@@ -122,13 +122,13 @@ The `StarRatingWidget` allows users to rate an item on a scale, typically from 1
 
 **Example:**
 
-^^^dart
+```dart
 SurveyQuestion(
   question: 'Rate the quality of our products',
   inputType: InputType.starRating,
   maxRating: 5,
 )
-^^^
+```
 
 ### 3. **RadioButtonsWidget**
 
@@ -136,13 +136,13 @@ The `RadioButtonsWidget` is used for single-choice questions, where the responde
 
 **Example:**
 
-^^^dart
+```dart
 SurveyQuestion(
   question: 'How satisfied are you with our service?',
   inputType: InputType.radioButton,
   options: ['Very Satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very Dissatisfied'],
 )
-^^^
+```
 
 ### 4. **CheckboxesWidget**
 
@@ -150,13 +150,13 @@ The `CheckboxesWidget` allows respondents to select multiple options from a list
 
 **Example:**
 
-^^^dart
+```dart
 SurveyQuestion(
   question: 'What features do you use?',
   inputType: InputType.checkbox,
   options: ['Feature A', 'Feature B', 'Feature C'],
 )
-^^^
+```
 
 ### 5. **SliderWidget**
 
@@ -164,14 +164,14 @@ The `SliderWidget` is used for range-based questions, where respondents can sele
 
 **Example:**
 
-^^^dart
+```dart
 SurveyQuestion(
   question: 'How likely are you to recommend our service?',
   inputType: InputType.slider,
   minSliderValue: 0,
   maxSliderValue: 10,
 )
-^^^
+```
 
 ## API Requests
 
@@ -183,7 +183,7 @@ To submit survey responses using an HTTP request, configure the `SubmissionConfi
 
 **Example:**
 
-^^^dart
+```dart
 final submissionConfigHttp = SubmissionConfig(
   type: SubmissionType.http,
   url: 'https://yourapi.com/submit-survey',
@@ -192,7 +192,7 @@ final submissionConfigHttp = SubmissionConfig(
     return data; // Directly use the survey data as the body
   },
 );
-^^^
+```
 
 ### 2. **GraphQL Request**
 
@@ -200,7 +200,7 @@ For GraphQL submissions, configure the `SubmissionConfig` with the `graph` submi
 
 **Example:**
 
-^^^dart
+```dart
 final submissionConfigGraph = SubmissionConfig(
   type: SubmissionType.graph,
   url: 'https://yourapi.com/graphql',
@@ -221,7 +221,7 @@ final submissionConfigGraph = SubmissionConfig(
     };
   },
 );
-^^^
+```
 
 ## Constructing the Survey Form
 
@@ -229,7 +229,7 @@ To construct a survey form, you need to define a `SurveyConfig` object that cont
 
 ### Example:
 
-^^^dart
+```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart'; // Import the package
 
@@ -296,7 +296,7 @@ class SurveyDemoPage extends StatelessWidget {
     );
   }
 }
-^^^
+```
 
 ## Key Features
 - **Customizable Surveys:** Configure different types of questions, including text fields, star ratings, radio buttons, checkboxes, and sliders.
