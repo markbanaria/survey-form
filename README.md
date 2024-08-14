@@ -100,11 +100,14 @@ class SurveyDemoPage extends StatelessWidget {
 
 ## Key Features
 **Customizable Surveys:** Configure different types of questions, including text fields, star ratings, radio buttons, checkboxes, and sliders.
+
 **Abstracted Submission Logic:** Easily configure the submission logic to use either HTTP or GraphQL APIs.
+
 **Reusable Components:** The survey components are reusable and can be easily integrated into any Flutter application.
 
 ## Future Enhancements
 **Customer Eligibility Handling:** Integration with a CRM or another API to determine if a survey should be shown to a specific customer.
+
 **Additional Input Types:** Support for more input types, such as date pickers or custom widgets.
 
 License
