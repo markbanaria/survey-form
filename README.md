@@ -2,6 +2,8 @@
 
 A Flutter package for creating and managing Customer Experience (CX) and Net Promoter Score (NPS) surveys. This package allows you to easily generate customizable surveys, collect responses, and submit them to your server using HTTP or GraphQL APIs.
 
+Try it here: https://insurance-wallet.vercel.app/
+
 ## Objective
 
 The `flutter_cx_nps_survey` package provides a reusable survey component for Flutter applications. It supports various input types like text fields, star ratings, radio buttons, checkboxes, and sliders. The package also includes an abstracted submission logic, allowing you to configure API endpoints and submission methods with minimal setup.
