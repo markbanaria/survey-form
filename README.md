@@ -196,7 +196,7 @@ final submissionConfigHttp = SubmissionConfig(
 
 ### 2. **GraphQL Request**
 
-For GraphQL submissions, configure the `SubmissionConfig` with the `graph` submission type. This requires specifying the GraphQL query, variables, and API endpoint.
+For GraphQL submissions, configure the SubmissionConfig with the graph submission type using the graphql_flutter package. This approach provides a more structured and feature-rich way to manage GraphQL requests in your Flutter application.
 
 **Example:**
 
@@ -229,9 +229,14 @@ To construct a survey form, you need to define a `SurveyConfig` object that cont
 
 ### Example:
 
+## Usage
+
+Here’s an example of how to use the `flutter_cx_nps_survey` package in your Flutter app, leveraging both HTTP and GraphQL for survey submission:
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart'; // Import the package
+import 'package:graphql_flutter/graphql_flutter.dart'; // Import graphql_flutter for GraphQL requests
 
 void main() {
   runApp(MyApp());
@@ -285,13 +290,35 @@ class SurveyDemoPage extends StatelessWidget {
       },
     );
 
+    // Configure the submission for GraphQL
+    final submissionConfigGraph = SubmissionConfig(
+      type: SubmissionType.graph,
+      url: 'https://yourapi.com/graphql',
+      headers: {'Content-Type': 'application/json'},
+      bodyBuilder: (data) {
+        return {
+          'query': '''
+            mutation SubmitSurvey(\$input: SurveyInput!) {
+              submitSurvey(input: \$input) {
+                success
+                message
+              }
+            }
+          ''',
+          'variables': {
+            'input': data, // Pass the survey data as GraphQL variables
+          },
+        };
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Survey Demo'),
       ),
       body: SurveyForm(
         config: surveyConfig,
-        submissionConfig: submissionConfigHttp, // Or use your GraphQL config
+        submissionConfig: submissionConfigGraph, // Or use submissionConfigHttp for HTTP submission
       ),
     );
   }

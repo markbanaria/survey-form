@@ -1,5 +1,6 @@
-import 'dart:convert'; // Import for JSON encoding
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 enum SubmissionType {
   http,
@@ -28,7 +29,7 @@ class SubmissionManager {
   }
 
   String generateSubmissionObject() {
-    return jsonEncode(surveyResponses); // Use jsonEncode to convert Map to JSON string
+    return jsonEncode(surveyResponses);
   }
 
   Future<void> submitSurvey(SubmissionConfig config) async {
@@ -42,24 +43,35 @@ class SubmissionManager {
           headers: config.headers,
           body: jsonEncode(body),
         );
+        if (response.statusCode == 200) {
+          print('HTTP survey submitted successfully!');
+        } else {
+          print('Failed to submit survey via HTTP. Status code: ${response.statusCode}');
+        }
         break;
 
       case SubmissionType.graph:
-        response = await http.post(
-          Uri.parse(config.url),
-          headers: config.headers,
-          body: jsonEncode({
-            'query': body['query'],
-            'variables': body['variables'],
-          }),
-        );
-        break;
-    }
+        // Using graphql_flutter for GraphQL requests
+        final HttpLink httpLink = HttpLink(config.url);
 
-    if (response.statusCode == 200) {
-      print('Survey submitted successfully!');
-    } else {
-      print('Failed to submit survey. Status code: ${response.statusCode}');
+        final GraphQLClient client = GraphQLClient(
+          link: httpLink,
+          cache: GraphQLCache(),
+        );
+
+        final MutationOptions options = MutationOptions(
+          document: gql(body['query']),
+          variables: body['variables'],
+        );
+
+        final result = await client.mutate(options);
+
+        if (result.hasException) {
+          print('GraphQL submission failed: ${result.exception.toString()}');
+        } else {
+          print('GraphQL survey submitted successfully!');
+        }
+        break;
     }
   }
 }
