@@ -84,6 +84,15 @@ class SurveyDemoPage extends StatelessWidget {
       bodyBuilder: (data) {
         return data; // Directly use the survey data as the body
       },
+      onSubmit: () {
+        print('Survey submission started.');
+      },
+      onSuccess: () {
+        print('Survey submitted successfully via HTTP!');
+      },
+      onError: (error) {
+        print('Failed to submit survey: $error');
+      },
     );
 
     return Scaffold(
@@ -179,7 +188,7 @@ The package supports both HTTP and GraphQL for submitting survey responses.
 
 ### 1. **HTTP Request**
 
-To submit survey responses using an HTTP request, configure the `SubmissionConfig` with the `http` submission type. You will need to provide the API endpoint URL, headers, and a body builder function.
+To submit survey responses using an HTTP request, configure the `SubmissionConfig` with the `http` submission type. You will need to provide the API endpoint URL, headers, a body builder function, and optionally, callbacks to handle events like submission start, success, and error.
 
 **Example:**
 
@@ -191,12 +200,21 @@ final submissionConfigHttp = SubmissionConfig(
   bodyBuilder: (data) {
     return data; // Directly use the survey data as the body
   },
+  onSubmit: () {
+    print('Survey submission started.');
+  },
+  onSuccess: () {
+    print('Survey submitted successfully via HTTP!');
+  },
+  onError: (error) {
+    print('Failed to submit survey: $error');
+  },
 );
 ```
 
 ### 2. **GraphQL Request**
 
-For GraphQL submissions, configure the SubmissionConfig with the graph submission type using the graphql_flutter package. This approach provides a more structured and feature-rich way to manage GraphQL requests in your Flutter application.
+For GraphQL submissions, configure the `SubmissionConfig` with the `graph` submission type using the `graphql_flutter` package. 
 
 **Example:**
 
@@ -220,109 +238,16 @@ final submissionConfigGraph = SubmissionConfig(
       },
     };
   },
+  onSubmit: () {
+    print('Survey submission started.');
+  },
+  onSuccess: () {
+    print('Survey submitted successfully via GraphQL!');
+  },
+  onError: (error) {
+    print('Failed to submit survey: $error');
+  },
 );
-```
-
-## Constructing the Survey Form
-
-To construct a survey form, you need to define a `SurveyConfig` object that contains the title, description, and a list of `SurveyQuestion` objects. You then pass this configuration along with a `SubmissionConfig` to the `SurveyForm` widget.
-
-### Example:
-
-## Usage
-
-Here’s an example of how to use the `flutter_cx_nps_survey` package in your Flutter app, leveraging both HTTP and GraphQL for survey submission:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart'; // Import the package
-import 'package:graphql_flutter/graphql_flutter.dart'; // Import graphql_flutter for GraphQL requests
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CX & NPS Survey Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: SurveyDemoPage(),
-    );
-  }
-}
-
-class SurveyDemoPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Define the survey configuration
-    final surveyConfig = SurveyConfig(
-      title: 'Customer Satisfaction Survey',
-      description: 'Please answer the following questions to help us improve our service:',
-      questions: [
-        SurveyQuestion(
-          question: 'How satisfied are you with our service?',
-          inputType: InputType.radioButton,
-          options: ['Very Satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very Dissatisfied'],
-        ),
-        SurveyQuestion(
-          question: 'Rate the quality of our products',
-          inputType: InputType.starRating,
-          maxRating: 5,
-        ),
-        SurveyQuestion(
-          question: 'Any additional comments?',
-          inputType: InputType.textField,
-        ),
-      ],
-    );
-
-    // Configure the submission for HTTP
-    final submissionConfigHttp = SubmissionConfig(
-      type: SubmissionType.http,
-      url: 'https://yourapi.com/submit-survey',
-      headers: {'Content-Type': 'application/json'},
-      bodyBuilder: (data) {
-        return data; // Directly use the survey data as the body
-      },
-    );
-
-    // Configure the submission for GraphQL
-    final submissionConfigGraph = SubmissionConfig(
-      type: SubmissionType.graph,
-      url: 'https://yourapi.com/graphql',
-      headers: {'Content-Type': 'application/json'},
-      bodyBuilder: (data) {
-        return {
-          'query': '''
-            mutation SubmitSurvey(\$input: SurveyInput!) {
-              submitSurvey(input: \$input) {
-                success
-                message
-              }
-            }
-          ''',
-          'variables': {
-            'input': data, // Pass the survey data as GraphQL variables
-          },
-        };
-      },
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Survey Demo'),
-      ),
-      body: SurveyForm(
-        config: surveyConfig,
-        submissionConfig: submissionConfigGraph, // Or use submissionConfigHttp for HTTP submission
-      ),
-    );
-  }
-}
 ```
 
 ## Key Features
