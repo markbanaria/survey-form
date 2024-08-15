@@ -1,8 +1,8 @@
 // lib/widgets/survey_form.dart
 import 'package:flutter/material.dart';
 import '../models/submission_config.dart'; // Correct import for SubmissionConfig
-import '../src/submission_manager.dart'; // Import the SubmissionManager
-import '../src/survey_config.dart';
+import '../services/submission_manager.dart'; // Import the SubmissionManager
+import '../models/survey_config.dart';
 
 class SurveyForm extends StatefulWidget {
   final SurveyConfig config;
