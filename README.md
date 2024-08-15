@@ -333,6 +333,3 @@ class SurveyDemoPage extends StatelessWidget {
 ## Future Enhancements
 - **Customer Eligibility Handling:** Integration with a CRM or another API to determine if a survey should be shown to a specific customer.
 - **Additional Input Types:** Support for more input types, such as date pickers or custom widgets.
-
-## Contributions
-Contributions are welcome! If you find a bug or have a feature request, please open an issue or submit a pull request.
