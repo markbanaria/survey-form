@@ -34,76 +34,92 @@ Here’s an example of how to use the `flutter_cx_nps_survey` package in your Fl
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart'; // Import the package
+import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart'; // Import your CX package
 
-void main() {
-  runApp(MyApp());
+class SurveyBlankPage extends StatefulWidget {
+  @override
+  _SurveyBlankPageState createState() => _SurveyBlankPageState();
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CX & NPS Survey Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: SurveyDemoPage(),
-    );
-  }
-}
+class _SurveyBlankPageState extends State<SurveyBlankPage> {
+  bool _isSubmitting = false;
 
-class SurveyDemoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Define the survey configuration
-    final surveyConfig = SurveyConfig(
-      title: 'Customer Satisfaction Survey',
-      description: 'Please answer the following questions to help us improve our service:',
+    // Define a simple NPS survey configuration with star rating input
+    final SurveyConfig surveyConfig = SurveyConfig(
+      title: 'Net Promoter Score Survey',
+      description: 'Please rate your experience with our service.',
       questions: [
         SurveyQuestion(
-          question: 'How satisfied are you with our service?',
-          inputType: InputType.radioButton,
-          options: ['Very Satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very Dissatisfied'],
-        ),
-        SurveyQuestion(
-          question: 'Rate the quality of our products',
-          inputType: InputType.starRating,
-          maxRating: 5,
-        ),
-        SurveyQuestion(
-          question: 'Any additional comments?',
-          inputType: InputType.textField,
+          question: 'How likely are you to recommend our service to a friend or colleague?',
+          inputType: InputType.starRating, // Use star rating input for NPS
+          maxRating: 10, // NPS usually ranges from 0 to 10
         ),
       ],
     );
 
-    // Configure the submission for HTTP
-    final submissionConfigHttp = SubmissionConfig(
-      type: SubmissionType.http,
-      url: 'https://yourapi.com/submit-survey',
+    // Define the submission configuration
+    final SubmissionConfig<Map<String, dynamic>> submissionConfig = jsonSubmissionConfig(
+      url: 'https://your-api-endpoint.com/api/nps/submit', // Replace with your API endpoint
       headers: {'Content-Type': 'application/json'},
-      bodyBuilder: (data) {
-        return data; // Directly use the survey data as the body
-      },
       onSubmit: () {
-        print('Survey submission started.');
+        setState(() {
+          _isSubmitting = true;
+        });
       },
       onSuccess: () {
-        print('Survey submitted successfully via HTTP!');
+        setState(() {
+          _isSubmitting = false;
+        });
+        // Handle success (e.g., show a confirmation message)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Survey submitted successfully!')),
+        );
       },
       onError: (error) {
-        print('Failed to submit survey: $error');
+        setState(() {
+          _isSubmitting = false;
+        });
+        // Handle error (e.g., show an error message)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to submit survey: $error')),
+        );
       },
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Survey Demo'),
+        title: Text('Blank Survey'),
       ),
-      body: SurveyForm(
-        config: surveyConfig,
-        submissionConfig: submissionConfigHttp, // Or use your GraphQL config
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 600),
+            child: Card(
+              color: Colors.white,
+              elevation: 2,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Stack(
+                  children: [
+                    // Survey form
+                    SurveyForm(
+                      config: surveyConfig,
+                      submissionConfig: submissionConfig,
+                    ),
+                    if (_isSubmitting)
+                      Center(
+                        child: CircularProgressIndicator(), // Spinner during submission
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -195,21 +211,17 @@ To submit survey responses using an HTTP request, configure the `SubmissionConfi
 **Example:**
 
 ```dart
-final submissionConfigHttp = SubmissionConfig(
-  type: SubmissionType.http,
-  url: 'https://yourapi.com/submit-survey',
+final SubmissionConfig<Map<String, dynamic>> submissionConfig = jsonSubmissionConfig(
+  url: 'https://your-api-endpoint.com/api/nps/submit',
   headers: {'Content-Type': 'application/json'},
-  bodyBuilder: (data) {
-    return data; // Directly use the survey data as the body
-  },
   onSubmit: () {
-    print('Survey submission started.');
+    // Handle pre-submission state, e.g., showing a loading indicator
   },
   onSuccess: () {
-    print('Survey submitted successfully via HTTP!');
+    // Handle success state, e.g., showing a success message
   },
   onError: (error) {
-    print('Failed to submit survey: $error');
+    // Handle error state, e.g., showing an error message
   },
 );
 ```
@@ -221,33 +233,34 @@ For GraphQL submissions, configure the `SubmissionConfig` with the `graph` submi
 **Example:**
 
 ```dart
-final submissionConfigGraph = SubmissionConfig(
+final SubmissionConfig<Map<String, dynamic>> submissionConfig = SubmissionConfig(
   type: SubmissionType.graph,
-  url: 'https://yourapi.com/graphql',
+  url: 'https://your-graphql-endpoint.com/graphql', // Replace with your GraphQL endpoint
   headers: {'Content-Type': 'application/json'},
-  bodyBuilder: (data) {
-    return {
-      'query': '''
-        mutation SubmitSurvey(\$input: SurveyInput!) {
-          submitSurvey(input: \$input) {
-            success
-            message
-          }
+  bodyBuilder: (data) => {
+    'query': '''
+      mutation SubmitNpsSurvey(\$input: NpsSurveyInput!) {
+        submitNpsSurvey(input: \$input) {
+          success
+          message
         }
-      ''',
-      'variables': {
-        'input': data, // Pass the survey data as GraphQL variables
-      },
-    };
+      }
+    ''',
+    'variables': {
+      'input': {
+        'score': data['nps_question'], // Map the survey data to the GraphQL variables
+        'comments': data['additional_comments'] ?? '', // Optional comments field
+      }
+    }
   },
   onSubmit: () {
-    print('Survey submission started.');
+    // Handle pre-submission state, e.g., showing a loading indicator
   },
   onSuccess: () {
-    print('Survey submitted successfully via GraphQL!');
+    // Handle success state, e.g., showing a success message
   },
   onError: (error) {
-    print('Failed to submit survey: $error');
+    // Handle error state, e.g., showing an error message
   },
 );
 ```
