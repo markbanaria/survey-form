@@ -28,18 +28,18 @@ class SubmissionConfig<T> {
 }
 
 // Helper functions for common use cases
-SubmissionConfig<String> jsonSubmissionConfig({
+SubmissionConfig<Map<String, dynamic>> jsonSubmissionConfig({
   required String url,
   required Map<String, String> headers,
   required SubmissionCallback? onSubmit,
   required SuccessCallback? onSuccess,
   required ErrorCallback? onError,
 }) {
-  return SubmissionConfig<String>(
+  return SubmissionConfig<Map<String, dynamic>>(
     type: SubmissionType.http,
     url: url,
     headers: headers,
-    bodyBuilder: (data) => jsonEncode(data), // Encode data to JSON string
+    bodyBuilder: (data) => data, // Pass the map data directly, no jsonEncode here
     onSubmit: onSubmit,
     onSuccess: onSuccess,
     onError: onError,

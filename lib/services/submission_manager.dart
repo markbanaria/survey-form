@@ -15,7 +15,7 @@ class SubmissionManager {
   }
 
   Future<void> submitSurvey(SubmissionConfig config) async {
-    final body = config.bodyBuilder(surveyResponses);
+    final body = config.bodyBuilder(surveyResponses); // Get raw map data
     final response;
 
     // Trigger the onSubmit callback if provided
@@ -29,7 +29,7 @@ class SubmissionManager {
           response = await http.post(
             Uri.parse(config.url),
             headers: config.headers,
-            body: jsonEncode(body),
+            body: jsonEncode(body), // Now encode to JSON here
           );
           if (response.statusCode == 200) {
             // Trigger the onSuccess callback if provided
@@ -54,7 +54,7 @@ class SubmissionManager {
           );
 
           final MutationOptions options = MutationOptions(
-            document: gql(body['query']),
+            document: gql(body['query']), // Extract query and variables as required
             variables: body['variables'],
           );
 
