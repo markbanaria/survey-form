@@ -19,9 +19,6 @@ class _SurveyFormState extends State<SurveyForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.config.title),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
