@@ -57,7 +57,7 @@ SubmissionConfig<Map<String, dynamic>> mapSubmissionConfig({
     type: SubmissionType.http,
     url: url,
     headers: headers,
-    bodyBuilder: (data) => data, // Return data as-is (assuming it's already a map)
+    bodyBuilder: (data) => data, // Pass data as-is
     onSubmit: onSubmit,
     onSuccess: onSuccess,
     onError: onError,
