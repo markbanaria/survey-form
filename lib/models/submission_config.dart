@@ -1,3 +1,4 @@
+import 'dart:convert'; // Import this to use jsonEncode and jsonDecode
 import 'callback_types.dart'; // Import the callback types
 
 enum SubmissionType {
@@ -5,11 +6,11 @@ enum SubmissionType {
   graph,
 }
 
-class SubmissionConfig {
+class SubmissionConfig<T> {
   final SubmissionType type;
   final String url;
   final Map<String, String> headers;
-  final Map<String, dynamic> Function(Map<String, dynamic> data) bodyBuilder;
+  final T Function(Map<String, dynamic> data) bodyBuilder;
 
   final SubmissionCallback? onSubmit;
   final SuccessCallback? onSuccess;
@@ -24,4 +25,41 @@ class SubmissionConfig {
     this.onSuccess,
     this.onError,
   });
+}
+
+// Helper functions for common use cases
+SubmissionConfig<String> jsonSubmissionConfig({
+  required String url,
+  required Map<String, String> headers,
+  required SubmissionCallback? onSubmit,
+  required SuccessCallback? onSuccess,
+  required ErrorCallback? onError,
+}) {
+  return SubmissionConfig<String>(
+    type: SubmissionType.http,
+    url: url,
+    headers: headers,
+    bodyBuilder: (data) => jsonEncode(data),
+    onSubmit: onSubmit,
+    onSuccess: onSuccess,
+    onError: onError,
+  );
+}
+
+SubmissionConfig<Map<String, dynamic>> mapSubmissionConfig({
+  required String url,
+  required Map<String, String> headers,
+  required SubmissionCallback? onSubmit,
+  required SuccessCallback? onSuccess,
+  required ErrorCallback? onError,
+}) {
+  return SubmissionConfig<Map<String, dynamic>>(
+    type: SubmissionType.http,
+    url: url,
+    headers: headers,
+    bodyBuilder: (data) => data,
+    onSubmit: onSubmit,
+    onSuccess: onSuccess,
+    onError: onError,
+  );
 }
