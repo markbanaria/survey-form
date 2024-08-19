@@ -18,32 +18,41 @@ class SurveyForm extends StatefulWidget {
 class _SurveyFormState extends State<SurveyForm> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              widget.config.description,
-              style: TextStyle(fontSize: 16.0),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.config.questions.length,
-                itemBuilder: (context, index) {
-                  final question = widget.config.questions[index];
-                  return _buildQuestionWidget(question);
-                },
+    final isDesktop = MediaQuery.of(context).size.width > 600;
+
+    return Dialog(
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? MediaQuery.of(context).size.width * 0.25 : 0,
+      ),
+      child: Container(
+        width: isDesktop ? MediaQuery.of(context).size.width * 0.5 : double.infinity,
+        height: MediaQuery.of(context).size.height,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(
+                widget.config.description,
+                style: TextStyle(fontSize: 16.0),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final submissionObject = widget.submissionManager.generateSubmissionObject();
-                widget.submissionManager.submitSurvey(widget.submissionConfig);
-              },
-              child: Text('Submit'),
-            ),
-          ],
+              Expanded(
+                child: ListView.builder(
+                  itemCount: widget.config.questions.length,
+                  itemBuilder: (context, index) {
+                    final question = widget.config.questions[index];
+                    return _buildQuestionWidget(question);
+                  },
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final submissionObject = widget.submissionManager.generateSubmissionObject();
+                  widget.submissionManager.submitSurvey(widget.submissionConfig);
+                },
+                child: Text('Submit'),
+              ),
+            ],
+          ),
         ),
       ),
     );
