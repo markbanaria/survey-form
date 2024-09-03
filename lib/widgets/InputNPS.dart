@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Icon1to10 extends StatefulWidget {
-  
+class InputNPS extends StatefulWidget {
   @override
-  _Icon1to10State createState() => _Icon1to10State();
+  _InputNPSState createState() => _InputNPSState();
 }
 
-class _Icon1to10State extends State<Icon1to10> {
+class _InputNPSState extends State<InputNPS> {
   int _selectedIndex = -1;
-  final String label = "Based on today's experience with PruServices, how likely would you recommend prudential to your family and friends?"; 
+  final String label = "Based on today's experience with PruServices, how likely would you recommend Prudential to your family and friends?"; 
   final String minlabel = "Not likely at all"; 
   final String maxlabel = "Extremely Likely"; 
 
@@ -76,9 +75,11 @@ class _Icon1to10State extends State<Icon1to10> {
                         child: Center(
                           child: Text(
                             '$number',
-                            style: TextStyle(
-                              color: buttonTextColor,
-                              fontWeight: FontWeight.w700,
+                            style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                color: buttonTextColor,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ),
@@ -95,10 +96,12 @@ class _Icon1to10State extends State<Icon1to10> {
           children: [
             Text(
               minlabel,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey[600],
+              style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[600],
+                ),
               ),
             ),
             Expanded(
@@ -106,14 +109,17 @@ class _Icon1to10State extends State<Icon1to10> {
             ),
             Text(
               maxlabel,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey[600],
+              style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[600],
+                ),
               ),
             ),
           ],
         ),
+        const SizedBox(height: 40.0),
       ],
     );
   }

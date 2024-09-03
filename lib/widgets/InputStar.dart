@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class StarRatingRow extends StatefulWidget {
+class InputStar extends StatefulWidget {
   final String text; // The text to be displayed on the left
 
-  StarRatingRow({required this.text});
+  InputStar({required this.text});
 
   @override
-  _StarRatingRowState createState() => _StarRatingRowState();
+  _InputStarState createState() => _InputStarState();
 }
 
-class _StarRatingRowState extends State<StarRatingRow> {
+class _InputStarState extends State<InputStar> {
   int _rating = 0; // Initial rating set to 0 (unfilled stars)
 
   @override
