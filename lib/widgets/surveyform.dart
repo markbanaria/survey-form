@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http; 
 
 //local
-import '../services/survey_logic.dart';
 import '../models/survey_config.dart';
 import 'InputNPS.dart';
 import 'InputStar.dart';
@@ -69,8 +68,11 @@ class _SurveyFormState extends State<SurveyForm> {
   }
 
   Future<void> _loadSurveyData() async {
-    String data = await DefaultAssetBundle.of(context).loadString("assets/question_set.json");
-    final jsonData = json.decode(data);
+    //use to load json asset from strapi or CMS
+    //String data = await DefaultAssetBundle.of(context).loadString("assets/question_set.json");
+    //final jsonData = json.decode(data);
+
+      final jsonData = json.decode('{"question_set":"NPS","question_sets":[{"name":"NPS","title":"Share your feedback","questions":[{"order":1,"code":"NET_PROMOTER_SCORE"},{"order":2,"code":"SECTION_HEADER"},{"order":3,"code":"CSAT_1"},{"order":4,"code":"CSAT_2"},{"order":5,"code":"CSAT_3"},{"order":6,"code":"CSAT_4"}],"submit_button":{"label":"Submit"}}],"questions":[{"type":"InputNPM","code":"NET_PROMOTER_SCORE","label":"On a scale of 1 to 10, how likely are you to recommend our service to others?","component":"InputNPS"},{"type":"SectionHeader","code":"SECTION_HEADER","label":"Rate our services in the following areas:"},{"type":"InputStar","code":"CSAT_1","label":"Clear information and instructions","component":"InputStar"},{"type":"InputStar","code":"CSAT_2","label":"User-friendly navigation","component":"InputStar"},{"type":"InputStar","code":"CSAT_3","label":"Easy to complete transaction","component":"InputStar"},{"type":"InputStar","code":"CSAT_4","label":"Engaging design and visuals","component":"InputStar"}],"question_types":[{"type":"InputNPS","description":"A numerical rating scale from 1 to 10."},{"type":"InputStar","description":"A numerical rating scale from 1 to 5."},{"type":"SectionHeader","description":"A section header for grouping related questions."}]}');
 
     final selectedSet = (jsonData["question_sets"] as List<dynamic>)
         .firstWhere((set) => set["name"] == widget.surveyQuestionSet, orElse: () => null);
@@ -181,41 +183,14 @@ class _SurveyFormState extends State<SurveyForm> {
         );
     }
   }
- 
-
- 
+  
   Future<void> _submitSurvey(String submitAPI, Map<String, dynamic> surveyResponses) async {
-    bool isTesting = true; // Set this to false to use the actual API call
-
-    if (isTesting) {
-      // Show a success snackbar here for testing
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Survey submitted successfully (testing mode).'),
-        ),
-      );
-      return;
-    }
-    
-    // Load API credentials from api.json and find submitAPI
-    String apiData = await DefaultAssetBundle.of(context).loadString("assets/api.json");
-    final apiCredentials = json.decode(apiData);
-
-    final apiInfo = apiCredentials["apis"][submitAPI];
-
-    if (apiInfo == null) {
-      print('API not found');
-      return;
-    }
-
-    final url = apiInfo["url"];
-    final apiKey = apiInfo["apiKey"];
+    const url = "https://pas-rust.vercel.app/api/public/customers/postfeedbackresponse";
 
     // Perform the API request
     final response = await http.post(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $apiKey',
         'Content-Type': 'application/json',
       },
       body: json.encode(surveyResponses),
@@ -241,19 +216,8 @@ class _SurveyFormState extends State<SurveyForm> {
       return customerNumber % 2 == 0; // Returns true if even, false if odd
     }
 
-    // Load API credentials from api.json and find showAPI
-    String apiData = await DefaultAssetBundle.of(context).loadString("assets/api.json");
-    final apiCredentials = json.decode(apiData);
-
-    final apiInfo = apiCredentials["apis"][showAPI];
-
-    if (apiInfo == null) {
-      print('API not found');
-      return false;
-    }
-
-    final url = apiInfo["url"];
-    final apiKey = apiInfo["apiKey"];
+    const url = "";
+    final apiKey = "";
 
     // Perform the API request
     final response = await http.get(
