@@ -154,6 +154,7 @@ class _SurveyPageState extends State<SurveyPage> {
 }
 ```
 In this case, bind _showSurvey to any action on the page like logout. For more complex implementation we can pass the `SurveyBusinessWidget` back to the logged-out page as they navigate out.
+3. (3.3) Run the test app. Navigate to `/apps/test_app` then `$ flutter run -d chrome`
 4. Present `/lib/services/questions_service.dart` as questions configuration service that will connect to strapi
 5. Run demo (logout then survey shown) (logout then survey hidden)
 6. Higlight that all UI components will then be calibrated to any existing components
