@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/SurveyConfig.dart';
-import '../services/APIService.dart';
-import '../services/AnswersService.dart';
-import 'SurveyUI.dart';
+import '../models/survey_config.dart';
+import '../services/api_service.dart';
+import '../services/answers_service.dart';
+import 'survey_ui.dart';
 
 class SurveyBusinessWidget extends StatefulWidget {
   const SurveyBusinessWidget({
