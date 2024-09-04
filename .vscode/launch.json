@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "flutter_cx_nps_survey",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/pages/debug_survey_page.dart"
+        },
+        {
+            "name": "flutter_cx_nps_survey (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "program": "lib/pages/debug_survey_page.dart"
+        },
+        {
+            "name": "flutter_cx_nps_survey (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "program": "lib/pages/debug_survey_page.dart"
+        }
+    ]
+}

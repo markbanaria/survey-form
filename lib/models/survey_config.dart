@@ -1,38 +1,53 @@
-// lib/src/survey_config.dart
-enum InputType {
-  textField,
-  starRating,
-  radioButton,
-  checkbox,
-  slider,
-}
 
-class SurveyQuestion {
-  final String question;
-  final InputType inputType;
-  final List<String>? options; // Used for radio buttons or checkboxes
-  final int? maxRating; // Used for star ratings
-  final double? minSliderValue; // Used for sliders
-  final double? maxSliderValue;
-
-  SurveyQuestion({
-    required this.question,
-    required this.inputType,
-    this.options,
-    this.maxRating,
-    this.minSliderValue,
-    this.maxSliderValue,
-  });
-}
-
-class SurveyConfig {
+class SurveyQuestionSet {
+  final String name;
   final String title;
-  final String description;
-  final List<SurveyQuestion> questions;
+  final List<QuestionReference> questions;
+  final String submitLabel;
 
-  SurveyConfig({
-    required this.title,
-    required this.description,
-    required this.questions,
-  });
+  SurveyQuestionSet({required this.name, required this.title, required this.questions, required this.submitLabel});
+
+  factory SurveyQuestionSet.fromJson(Map<String, dynamic> json) {
+    var list = json['questions'] as List;
+    List<QuestionReference> questionsList = list.map((i) => QuestionReference.fromJson(i)).toList();
+
+    return SurveyQuestionSet(
+      name: json['name'],
+      title: json['title'],
+      questions: questionsList,
+      submitLabel: json['submit_button']['label'],
+    );
+  }
+}
+
+class QuestionReference {
+  final int order;
+  final String code;
+
+  QuestionReference({required this.order, required this.code});
+
+  factory QuestionReference.fromJson(Map<String, dynamic> json) {
+    return QuestionReference(
+      order: json['order'],
+      code: json['code'],
+    );
+  }
+}
+
+class Question {
+  final String type;
+  final String code;
+  final String label;
+  final String? component; // Nullable as not all questions may have a component
+
+  Question({required this.type, required this.code, required this.label, this.component});
+
+  factory Question.fromJson(Map<String, dynamic> json) {
+    return Question(
+      type: json['type'],
+      code: json['code'],
+      label: json['label'],
+      component: json['component'], // This field is optional
+    );
+  }
 }
