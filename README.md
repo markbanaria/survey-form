@@ -108,8 +108,53 @@ We can enhance the sdk to load new api parameters based on a set of rules (eg. f
 - **API handling:** generate API parameters based on the app/LBU 
 - **CMS integration:** use a CMS to generate different question sets. then simply call them by name when you implmenet the widget
 
-## To Implement in PServices
+## To Demo in PServices
 
-1. Update /lib/helpers/api_config.dart with api url
-2. Present /lib/services/questions_service.dart as questions configuration service that will connect to strapi
-3. Present 
+1. Update `/lib/helpers/api_config.dart` with api url
+2. (2.1) SDK Method 1: Copy whole project package to front end folder, update pacs app pubspect to load this package
+in pubspec.yaml
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_cx_nps_survey:
+      path: "path to package location"
+```
+2. (2.2) 2 SDK Method 2: Copy contents of lib folder into widgets
+widgets/survey/[foldercontents]
+3. (3.1)Import to homepage
+if method 1: `import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart';`
+if method 2: `import '../widgets/flutter_cx_nps_survey.dart` 
+3. (3.2) Implement in home page.
+```dart
+class _SurveyPageState extends State<SurveyPage> {
+  void _showSurvey() {
+    // Use the method from the survey package to show the survey dialog
+    SurveyBusinessWidget.showSurveyDialog(
+      context: context,
+      surveyQuestionSet: widget.questionSet,
+      customerId: widget.customerId,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: _showSurvey,
+          child: const Text('logout'),
+        ),
+      ),
+    );
+  }
+}
+```
+In this case, bind _showSurvey to any action on the page like logout. For more complex implementation we can pass the `SurveyBusinessWidget` back to the logged-out page as they navigate out.
+4. Present `/lib/services/questions_service.dart` as questions configuration service that will connect to strapi
+5. Run demo (logout then survey shown) (logout then survey hidden)
+6. Higlight that all UI components will then be calibrated to any existing components
+7. Higlight that feature flagging can be used in future to show/hide
