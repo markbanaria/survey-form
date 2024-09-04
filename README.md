@@ -110,8 +110,7 @@ We can enhance the sdk to load new api parameters based on a set of rules (eg. f
 
 ## To Demo in PServices
 
-1. Update `/lib/helpers/api_config.dart` with api url
-2. (2.1) SDK Method 1: Copy whole project package to front end folder, update pacs app pubspect to load this package
+1. (1.1) SDK Method 1: Copy whole project package to front end folder, update pacs app pubspect to load this package
 in pubspec.yaml
 ```yaml
 dependencies:
@@ -120,11 +119,16 @@ dependencies:
   flutter_cx_nps_survey:
       path: "path to package location"
 ```
-2. (2.2) 2 SDK Method 2: Copy contents of lib folder into widgets
+
+1. (1.2) 2 SDK Method 2: Copy contents of lib folder into widgets
 widgets/survey/[foldercontents]
+
+2. Update `/lib/helpers/api_config.dart` with api url
+
 3. (3.1)Import to homepage
 if method 1: `import 'package:flutter_cx_nps_survey/flutter_cx_nps_survey.dart';`
 if method 2: `import '../widgets/flutter_cx_nps_survey.dart` 
+
 3. (3.2) Implement in home page.
 ```dart
 class _SurveyPageState extends State<SurveyPage> {
@@ -154,8 +158,13 @@ class _SurveyPageState extends State<SurveyPage> {
 }
 ```
 In this case, bind _showSurvey to any action on the page like logout. For more complex implementation we can pass the `SurveyBusinessWidget` back to the logged-out page as they navigate out.
+
 3. (3.3) Run the test app. Navigate to `/apps/test_app` then `$ flutter run -d chrome`
+
 4. Present `/lib/services/questions_service.dart` as questions configuration service that will connect to strapi
+
 5. Run demo (logout then survey shown) (logout then survey hidden)
+
 6. Higlight that all UI components will then be calibrated to any existing components
+
 7. Higlight that feature flagging can be used in future to show/hide
