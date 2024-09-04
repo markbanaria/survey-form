@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InputNPS extends StatefulWidget {
+  final Function(int) onRatingSelected; // Callback to parent
+
+  InputNPS({required this.onRatingSelected});
+
   @override
   _InputNPSState createState() => _InputNPSState();
 }
 
 class _InputNPSState extends State<InputNPS> {
   int _selectedIndex = -1;
-  final String label = "Based on today's experience with PruServices, how likely would you recommend Prudential to your family and friends?"; 
-  final String minlabel = "Not likely at all"; 
-  final String maxlabel = "Extremely Likely"; 
+  final String label =
+      "Based on today's experience with PruServices, how likely would you recommend Prudential to your family and friends?";
+  final String minlabel = "Not likely at all";
+  final String maxlabel = "Extremely Likely";
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [        
+      children: [
         Text(
           label,
           style: GoogleFonts.openSans(
@@ -31,10 +36,13 @@ class _InputNPSState extends State<InputNPS> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(10, (index) {
             int number = index + 1;
-            IconData iconData = number <= 5 ? Icons.sentiment_dissatisfied : Icons.sentiment_satisfied;
+            IconData iconData =
+                number <= 5 ? Icons.sentiment_dissatisfied : Icons.sentiment_satisfied;
             Color iconColor;
             Color buttonColor;
-            Color buttonTextColor = _selectedIndex == index ? Colors.white : Colors.grey[600] ?? Colors.grey;
+            Color buttonTextColor = _selectedIndex == index
+                ? Colors.white
+                : Colors.grey[600] ?? Colors.grey;
             Color borderColor;
 
             if (number <= 4) {
@@ -57,6 +65,7 @@ class _InputNPSState extends State<InputNPS> {
                   setState(() {
                     _selectedIndex = index;
                   });
+                  widget.onRatingSelected(number); // Notify parent of selected value
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -70,7 +79,8 @@ class _InputNPSState extends State<InputNPS> {
                         decoration: BoxDecoration(
                           color: buttonColor,
                           borderRadius: BorderRadius.circular(4.0),
-                          border: Border.all(color: borderColor, width: _selectedIndex == index ? 2 : 1),
+                          border: Border.all(
+                              color: borderColor, width: _selectedIndex == index ? 2 : 1),
                         ),
                         child: Center(
                           child: Text(
@@ -100,7 +110,7 @@ class _InputNPSState extends State<InputNPS> {
                 textStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: Colors.grey[600],
+                  color: Colors.grey[500],
                 ),
               ),
             ),
@@ -113,13 +123,13 @@ class _InputNPSState extends State<InputNPS> {
                 textStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: Colors.grey[600],
+                  color: Colors.grey[500],
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 40.0),
+        const SizedBox(height: 32.0),
       ],
     );
   }

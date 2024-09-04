@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts package
 
 class InputStar extends StatefulWidget {
   final String text; // The text to be displayed on the left
+  final Function(int) onStarSelected; // Callback to parent
 
-  InputStar({required this.text});
+  InputStar({required this.text, required this.onStarSelected});
 
   @override
   _InputStarState createState() => _InputStarState();
@@ -21,10 +23,12 @@ class _InputStarState extends State<InputStar> {
           children: [
             Text(
               widget.text, // Display the passed text
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF202020),
+              style: GoogleFonts.openSans( // Apply Open Sans font
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF727272),
+                ),
               ),
             ),
             Expanded(
@@ -43,6 +47,7 @@ class _InputStarState extends State<InputStar> {
                         setState(() {
                           _rating = index + 1; // Update the rating based on the star clicked
                         });
+                        widget.onStarSelected(_rating); // Notify parent of selected value
                       },
                       iconSize: 20.0, // Smaller size for the star icons
                       padding: EdgeInsets.zero, // Remove padding between icons
