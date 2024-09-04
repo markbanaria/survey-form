@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class InputNPS extends StatefulWidget {
   final Function(int) onRatingSelected; // Callback to parent
 
-  InputNPS({required this.onRatingSelected});
+  const InputNPS({super.key, required this.onRatingSelected});
 
   @override
   _InputNPSState createState() => _InputNPSState();
@@ -46,17 +46,17 @@ class _InputNPSState extends State<InputNPS> {
             Color borderColor;
 
             if (number <= 4) {
-              iconColor = _selectedIndex == index ? Colors.red : Color(0xFFDCDCDC);
+              iconColor = _selectedIndex == index ? Colors.red : const Color(0xFFDCDCDC);
               buttonColor = _selectedIndex == index ? Colors.red : Colors.transparent;
-              borderColor = _selectedIndex == index ? Colors.red : Color(0xFFDCDCDC);
+              borderColor = _selectedIndex == index ? Colors.red : const Color(0xFFDCDCDC);
             } else if (number <= 7) {
-              iconColor = _selectedIndex == index ? Color(0xFFE79547) : Color(0xFFDCDCDC);
-              buttonColor = _selectedIndex == index ? Color(0xFFE79547) : Colors.transparent;
-              borderColor = _selectedIndex == index ? Color(0xFFE79547) : Color(0xFFDCDCDC);
+              iconColor = _selectedIndex == index ? const Color(0xFFE79547) : const Color(0xFFDCDCDC);
+              buttonColor = _selectedIndex == index ? const Color(0xFFE79547) : Colors.transparent;
+              borderColor = _selectedIndex == index ? const Color(0xFFE79547) : const Color(0xFFDCDCDC);
             } else {
-              iconColor = _selectedIndex == index ? Colors.green : Color(0xFFDCDCDC);
+              iconColor = _selectedIndex == index ? Colors.green : const Color(0xFFDCDCDC);
               buttonColor = _selectedIndex == index ? Colors.green : Colors.transparent;
-              borderColor = _selectedIndex == index ? Colors.green : Color(0xFFDCDCDC);
+              borderColor = _selectedIndex == index ? Colors.green : const Color(0xFFDCDCDC);
             }
 
             return Expanded(
@@ -71,7 +71,7 @@ class _InputNPSState extends State<InputNPS> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(iconData, color: iconColor),
-                    SizedBox(height: 4.0),
+                    const SizedBox(height: 4.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
                       child: Container(
@@ -101,7 +101,7 @@ class _InputNPSState extends State<InputNPS> {
             );
           }),
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         Row(
           children: [
             Text(
@@ -114,7 +114,7 @@ class _InputNPSState extends State<InputNPS> {
                 ),
               ),
             ),
-            Expanded(
+            const Expanded(
               child: SizedBox(),
             ),
             Text(

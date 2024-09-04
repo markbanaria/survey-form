@@ -97,6 +97,8 @@ The package comes with 3 helper apis that come pre-configured:
 2. Geenrate question set
 3. Submit 
 
+We can enhance the sdk to load new api parameters based on a set of rules (eg. for each lbu)
+
 ## Key Features
 - **Customizable Surveys:** Configure different types of questions, including text fields, star ratings, radio buttons, checkboxes, and sliders.
 - **Abstracted Submission Logic:** pre-configured submission logic.
@@ -105,3 +107,9 @@ The package comes with 3 helper apis that come pre-configured:
 ## Future Enhancements
 - **API handling:** generate API parameters based on the app/LBU 
 - **CMS integration:** use a CMS to generate different question sets. then simply call them by name when you implmenet the widget
+
+## To Implement in PServices
+
+1. Update /lib/helpers/api_config.dart with api url
+2. Present /lib/services/questions_service.dart as questions configuration service that will connect to strapi
+3. Present 

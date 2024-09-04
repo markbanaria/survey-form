@@ -5,14 +5,14 @@ class InputText extends StatefulWidget {
   final String label; // The label to be displayed above the text input
   final Function(String) onTextChanged; // Callback to parent
 
-  InputText({required this.label, required this.onTextChanged});
+  const InputText({super.key, required this.label, required this.onTextChanged});
 
   @override
   _InputTextState createState() => _InputTextState();
 }
 
 class _InputTextState extends State<InputText> {
-  TextEditingController _controller = TextEditingController(); // Controller to manage the text input
+  final TextEditingController _controller = TextEditingController(); // Controller to manage the text input
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class _InputTextState extends State<InputText> {
         const SizedBox(height: 16.0),
         Container(
           height: 1,
-          color: Color(0xFFDCDCDC),
+          color: const Color(0xFFDCDCDC),
         ),
         const SizedBox(height: 24.0),
         Text(
@@ -41,7 +41,7 @@ class _InputTextState extends State<InputText> {
           onChanged: (value) {
             widget.onTextChanged(value); // Notify parent of text change
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           ),

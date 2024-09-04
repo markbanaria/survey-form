@@ -5,7 +5,7 @@ class InputStar extends StatefulWidget {
   final String text; // The text to be displayed on the left
   final Function(int) onStarSelected; // Callback to parent
 
-  InputStar({required this.text, required this.onStarSelected});
+  const InputStar({super.key, required this.text, required this.onStarSelected});
 
   @override
   _InputStarState createState() => _InputStarState();
@@ -31,7 +31,7 @@ class _InputStarState extends State<InputStar> {
                 ),
               ),
             ),
-            Expanded(
+            const Expanded(
               child: SizedBox(), // To push the stars to the right
             ),
             Row(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'InputNPS.dart';
-import 'InputStar.dart';
-import 'InputText.dart';
-import '../models/SurveyConfig.dart';
+import 'input_nps.dart';
+import 'input_star.dart';
+import 'input_text.dart';
+import '../models/survey_config.dart';
 
 class SurveyUI extends StatelessWidget {
   final bool isLoading;
@@ -15,7 +15,7 @@ class SurveyUI extends StatelessWidget {
   final Function(String, dynamic) onAnswerUpdate;
 
   const SurveyUI({
-    Key? key,
+    super.key,
     required this.isLoading,
     required this.title,
     required this.questions,
@@ -23,14 +23,14 @@ class SurveyUI extends StatelessWidget {
     required this.isSubmitting,
     required this.onSubmit,
     required this.onAnswerUpdate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
       child: isLoading
-          ? Center(child: CircularProgressIndicator()) // Show spinner while loading
+          ? const Center(child: CircularProgressIndicator()) // Show spinner while loading
           : Container(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -46,13 +46,13 @@ class SurveyUI extends StatelessWidget {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   Expanded(child: ListView(children: _buildSurveyQuestions())),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: isSubmitting
-                        ? CircularProgressIndicator() // Show spinner while submitting
+                        ? const CircularProgressIndicator() // Show spinner while submitting
                         : TextButton(
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.red,

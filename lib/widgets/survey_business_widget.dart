@@ -48,11 +48,10 @@ class _SlideInDialog extends StatefulWidget {
   final Duration duration;
 
   const _SlideInDialog({
-    Key? key,
     required this.surveyQuestionSet,
     required this.customerId,
     required this.duration,
-  }) : super(key: key);
+  });
 
   @override
   _SlideInDialogState createState() => _SlideInDialogState();
@@ -113,7 +112,7 @@ class _SlideInDialogState extends State<_SlideInDialog>
 class _SurveyBusinessWidgetState extends State<SurveyBusinessWidget> {
   late List<QuestionReference> _questions = [];
   late Map<String, Question> _questionMap = {};
-  late Map<String, dynamic> _responses = {};
+  late final Map<String, dynamic> _responses = {};
   late String _title = "";
   bool _isLoading = true; // Track loading state
   bool _isSubmitting = false; // Track submission state
@@ -165,7 +164,7 @@ class _SurveyBusinessWidgetState extends State<SurveyBusinessWidget> {
       surveyResponses,
       () {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Survey submitted successfully.')),
+          const SnackBar(content: Text('Survey submitted successfully.')),
         );
         setState(() {
           _isSubmitting = false;
