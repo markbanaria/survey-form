@@ -11,9 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.3
-  graphql_flutter: ^5.0.0
   google_fonts: ^4.0.3
   cupertino_icons: ^1.0.8
+  flutter_svg: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -25,6 +25,13 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - lib/assets/nps_low.svg
+    - lib/assets/nps_low_active.svg
+    - lib/assets/nps_med.svg
+    - lib/assets/nps_med_active.svg
+    - lib/assets/nps_high.svg
+    - lib/assets/nps_high_active.svg
 
   # To add assets to your package, add an assets section, like this:
   # assets:

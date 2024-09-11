@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InputNPS extends StatefulWidget {
@@ -17,6 +18,23 @@ class _InputNPSState extends State<InputNPS> {
   final String minlabel = "Not likely at all";
   final String maxlabel = "Extremely Likely";
 
+  // Method to determine which SVG to load based on index and active state
+  String _getSvgPath(int index, bool isActive) {
+    if (index <= 5) {
+      return isActive
+          ? 'packages/flutter_cx_nps_survey/lib/assets/nps_low_active.svg'
+          : 'packages/flutter_cx_nps_survey/lib/assets/nps_low.svg';
+    } else if (index <= 7) {
+      return isActive
+          ? 'packages/flutter_cx_nps_survey/lib/assets/nps_med_active.svg'
+          : 'packages/flutter_cx_nps_survey/lib/assets/nps_med.svg';
+    } else {
+      return isActive
+          ? 'packages/flutter_cx_nps_survey/lib/assets/nps_high_active.svg'
+          : 'packages/flutter_cx_nps_survey/lib/assets/nps_high.svg';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,37 +45,42 @@ class _InputNPSState extends State<InputNPS> {
             textStyle: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[600] ?? Colors.grey, // Removed 'const' to allow non-constant color
+              color: Colors.grey[600] ?? Colors.grey,
             ),
           ),
         ),
-        const SizedBox(height: 16.0),
+        const SizedBox(height: 32.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(10, (index) {
             int number = index + 1;
-            IconData iconData =
-                number <= 5 ? Icons.sentiment_dissatisfied : Icons.sentiment_satisfied;
-            Color iconColor;
-            Color buttonColor;
-            Color buttonTextColor = _selectedIndex == index
-                ? Colors.white
-                : Colors.grey[600] ?? Colors.grey;
-            Color borderColor;
+            bool isActive = _selectedIndex >= index;
 
-            if (number <= 4) {
-              iconColor = _selectedIndex == index ? Colors.red : const Color(0xFFDCDCDC);
-              buttonColor = _selectedIndex == index ? Colors.red : Colors.transparent;
-              borderColor = _selectedIndex == index ? Colors.red : const Color(0xFFDCDCDC);
-            } else if (number <= 7) {
-              iconColor = _selectedIndex == index ? const Color(0xFFE79547) : const Color(0xFFDCDCDC);
-              buttonColor = _selectedIndex == index ? const Color(0xFFE79547) : Colors.transparent;
-              borderColor = _selectedIndex == index ? const Color(0xFFE79547) : const Color(0xFFDCDCDC);
+            Color buttonTextColor = isActive ? Colors.black : Colors.grey[600] ?? Colors.grey;
+            Color buttonColor = Colors.transparent;
+            Color borderColor = const Color(0xFFDCDCDC);
+            FontWeight fontWeight = isActive ? FontWeight.bold : FontWeight.normal;
+
+            // Custom border radius based on first, middle, last button
+            BorderRadius borderRadius;
+            if (index == 0) {
+              borderRadius = const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                bottomLeft: Radius.circular(8),
+              );
+            } else if (index == 9) {
+              borderRadius = const BorderRadius.only(
+                topRight: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+              );
             } else {
-              iconColor = _selectedIndex == index ? Colors.green : const Color(0xFFDCDCDC);
-              buttonColor = _selectedIndex == index ? Colors.green : Colors.transparent;
-              borderColor = _selectedIndex == index ? Colors.green : const Color(0xFFDCDCDC);
+              borderRadius = BorderRadius.zero;
             }
+
+            // Border properties, no right border unless index is 9
+            BorderSide rightBorder = index == 9
+                ? BorderSide(color: borderColor, width: 1)
+                : BorderSide.none;
 
             return Expanded(
               child: GestureDetector(
@@ -70,26 +93,32 @@ class _InputNPSState extends State<InputNPS> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(iconData, color: iconColor),
-                    const SizedBox(height: 4.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Container(
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                          color: buttonColor,
-                          borderRadius: BorderRadius.circular(4.0),
-                          border: Border.all(
-                              color: borderColor, width: _selectedIndex == index ? 2 : 1),
+                    // Add the smiley SVG icons above the buttons
+                    SvgPicture.asset(
+                      _getSvgPath(index, isActive),
+                      height: 20.0, // Adjust SVG size as necessary
+                    ),
+                    const SizedBox(height: 16.0), // 16px space between smiley and button
+                    // Buttons for selecting NPS value
+                    Container(
+                      height: 32.0,
+                      decoration: BoxDecoration(
+                        color: buttonColor, // Button will be filled up to the selected index
+                        borderRadius: borderRadius,
+                        border: Border(
+                          top: BorderSide(color: borderColor, width: 1),
+                          left: BorderSide(color: borderColor, width: 1),
+                          bottom: BorderSide(color: borderColor, width: 1),
+                          right: rightBorder,
                         ),
-                        child: Center(
-                          child: Text(
-                            '$number',
-                            style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                color: buttonTextColor,
-                                fontWeight: FontWeight.w700,
-                              ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$number',
+                          style: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                              color: buttonTextColor,
+                              fontWeight: fontWeight,
                             ),
                           ),
                         ),

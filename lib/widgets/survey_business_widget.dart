@@ -57,8 +57,7 @@ class _SlideInDialog extends StatefulWidget {
   _SlideInDialogState createState() => _SlideInDialogState();
 }
 
-class _SlideInDialogState extends State<_SlideInDialog>
-    with SingleTickerProviderStateMixin {
+class _SlideInDialogState extends State<_SlideInDialog> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
 
@@ -156,10 +155,7 @@ class _SurveyBusinessWidgetState extends State<SurveyBusinessWidget> {
     setState(() {
       _isSubmitting = true;
     });
-
     Map<String, dynamic> surveyResponses = _answersService.generateSurveyResponses(widget.customerId, _responses);
-
-
     await submitSurvey(
       surveyResponses,
       () {
